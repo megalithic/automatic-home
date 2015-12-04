@@ -16,6 +16,7 @@ import { setPlayerState, fetchPlayer } from '../actions/sonos'
 import { fetchWeather } from '../actions/weather'
 
 import { isEmpty } from 'lodash'
+import config from '../config'
 
 class Main extends Component {
   static propTypes = {
@@ -27,6 +28,7 @@ class Main extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      isNightTime: false,
       timeBasedStyles: {
         containerColor: {
           backgroundColor: 'transparent'
@@ -39,18 +41,19 @@ class Main extends Component {
     // TODO: figure out a better way of getting frequent sonos player state updates
     this.sonosPolling = setInterval(() => {
       this.props.dispatch(fetchPlayer('bedroom')) // TODO: make zone selectable
-    }, 250)
+    }, config.sonosPoll)
 
     this.props.dispatch(fetchWeather())
     this.weatherPolling = setInterval(() => {
       this.props.dispatch(fetchWeather())
-    }, 1800000) // 30 mins
+    }, config.weatherPoll)
   }
 
   componentWillReceiveProps (nextProps) {
     this.setState({
+      isNightTime: this.isNightTime(),
       timeBasedStyles: {
-        containerColor: this.getTimeBasedContainerColor(
+        containerStyles: this.getTimeBasedStyles(
           nextProps,
           { backgroundColor: 'rgba(255, 255, 255, .5)' }
         )
@@ -79,31 +82,58 @@ class Main extends Component {
     return time >= sunsetTime
   }
 
-  getTimeBasedContainerColor = (props, style) => {
-    if (props.weather && !isEmpty(props.weather) && !isEmpty(props.weather.forecast)) {
-      style = {
-        backgroundColor:
-          this.isNightTime(props.weather.forecast.daily.data[0].time, props.weather.forecast.daily.data[0].sunsetTime)
-          ? 'rgba(0, 10, 20, .65)'
-          : 'rgba(255, 255, 255, .5)'
+  forecastIsLoaded = () => {
+    return this.props.weather && !isEmpty(this.props.weather) && !isEmpty(this.props.weather.forecast)
+  }
+
+  getTimeBasedStyles = (props, styles) => {
+    if (this.forecastIsLoaded()) {
+      if (this.isNightTime(props.weather.forecast.daily.data[0].time, props.weather.forecast.daily.data[0].sunsetTime)) {
+        styles = {
+          backgroundColor: 'rgba(0, 10, 20, .65)'
+        }
+      } else {
+        styles = {
+          backgroundColor: 'rgba(255, 255, 255, .5)'
+        }
       }
     }
-    return style
+
+    return styles
+  }
+
+  getTimeBasedImage = (source) => {
+    if (this.forecastIsLoaded()) {
+      if (this.isNightTime()) {
+        source = {uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/app/images/night.jpg'}
+      } else {
+        source = {uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/app/images/day.jpg'}
+      }
+    }
+
+    return source
   }
 
   render () {
     return (
       <Image
-        source={{uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/628.jpg'}}
+        source={this.getTimeBasedImage({uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/app/images/night.jpg'})}
         style={styles.containerImage}
       >
-        <View style={[styles.container, this.state.timeBasedStyles.containerColor]}>
-          <Clock />
+        <View style={[styles.container, this.state.timeBasedStyles.containerStyles]}>
+          <Clock isNightTime={this.state.isNightTime}>
+            <Weather isNightTime={this.state.isNightTime} weather={this.props.weather.forecast} />
+          </Clock>
           <View style={styles.subInfo}>
-            <SonosTrack player={this.props.sonos.player} />
+            <SonosTrack isNightTime={this.state.isNightTime} player={this.props.sonos.player} />
           </View>
-          <SonosControl player={this.props.sonos.player} setPlayerState={this.setPlayerState} nextTrack={this.nextTrack} prevTrack={this.prevTrack} />
-          <Weather weather={this.props.weather.forecast} />
+          <SonosControl
+            isNightTime={this.state.isNightTime}
+            player={this.props.sonos.player}
+            setPlayerState={this.setPlayerState}
+            nextTrack={this.nextTrack}
+            prevTrack={this.prevTrack}
+          />
         </View>
       </Image>
     )

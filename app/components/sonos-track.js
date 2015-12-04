@@ -7,40 +7,6 @@ import React, {
 } from 'react-native'
 import {isEmpty} from 'lodash'
 
-let styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: 20
-  },
-  currentTrack: {
-    flex: 1,
-    width: 350,
-    padding: 10
-  },
-  nextTrack: {
-    flex: 1,
-    width: 350,
-    padding: 10
-  },
-  trackTitle: {
-    color: '#555'
-  },
-  trackInfo: {
-    color: '#fff'
-  },
-  scrollView: {
-    backgroundColor: '#6A85B1',
-    height: 300,
-    width: 400
-  },
-  horizontalScrollView: {
-    height: 120
-  }
-})
-
 export class SonosTrack extends Component {
   static propTypes = {
     player: PropTypes.object
@@ -78,3 +44,37 @@ export class SonosTrack extends Component {
     return (this.props.player !== undefined && this.renderTrackInfo())
   }
 }
+
+let styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 20
+  },
+  currentTrack: {
+    flex: 1,
+    width: 350,
+    padding: 10
+  },
+  nextTrack: {
+    flex: 1,
+    width: 350,
+    padding: 10
+  },
+  trackTitle: {
+    color: '#555'
+  },
+  trackInfo: {
+    color: '#fff'
+  },
+  scrollView: {
+    backgroundColor: '#6A85B1',
+    height: 300,
+    width: 400
+  },
+  horizontalScrollView: {
+    height: 120
+  }
+})

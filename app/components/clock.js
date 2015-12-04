@@ -1,5 +1,6 @@
 import React, {
   Component,
+  PropTypes,
   View,
   Text,
   StyleSheet
@@ -7,33 +8,11 @@ import React, {
 
 import moment from 'moment'
 
-let styles = StyleSheet.create({
-  clock: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 60,
-    backgroundColor: 'rgba(255, 255, 255, .05)',
-    borderRadius: 15,
-    borderColor: '#000',
-    borderWidth: 1
-  },
-  time: {
-    color: 'rgba(255, 255, 255, 1)',
-    fontSize: 50,
-    fontWeight: 'bold'
-  },
-  seconds: {
-    color: 'rgba(255, 255, 255, .35)',
-    fontSize: 30,
-    fontWeight: 'normal'
-  },
-  date: {
-    color: 'rgba(255, 255, 255, .2)',
-    fontSize: 20
-  }
-})
-
 export class Clock extends Component {
+  static propTypes = {
+    children: PropTypes.node
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -62,8 +41,34 @@ export class Clock extends Component {
         <Text style={styles.date}>
           {this.state.currentDateTime.format('ddd D').toUpperCase()}
         </Text>
+        {this.props.children}
       </View>
     )
   }
 }
 
+let styles = StyleSheet.create({
+  clock: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 60,
+    backgroundColor: 'rgba(255, 255, 255, .05)',
+    borderRadius: 15,
+    borderColor: '#000',
+    borderWidth: 1
+  },
+  time: {
+    color: 'rgba(255, 255, 255, 1)',
+    fontSize: 50,
+    fontWeight: 'bold'
+  },
+  seconds: {
+    color: 'rgba(255, 255, 255, .35)',
+    fontSize: 30,
+    fontWeight: 'normal'
+  },
+  date: {
+    color: 'rgba(255, 255, 255, .2)',
+    fontSize: 20
+  }
+})
