@@ -2,8 +2,6 @@
 
 ## A basic mobile app, meant for basic automation control.
 
---
-
 Not very configurable yet.
 
 For now, it simply:
