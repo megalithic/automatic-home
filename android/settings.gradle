@@ -1,0 +1,3 @@
+rootProject.name = 'AutomaticHome'
+
+include ':app'

@@ -1,0 +1,51 @@
+{
+  "name": "automatic-home",
+  "description": "Automatic Home",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "react-native run-android",
+    "start": "emulator -avd automatic_home; react-native run-android",
+    "android": "./node_modules/react-native/packager/launchPackager.command; exit;"
+  },
+  "dependencies": {
+    "react": "^0.14.3",
+    "react-redux": "^3.1.0",
+    "redux": "^3.0.4"
+  },
+  "devDependencies": {
+    "axios": "^0.7.0",
+    "lodash": "^3.10.1",
+    "moment": "^2.10.6",
+    "react-native": "^0.14.2",
+    "redux-logger": "^2.0.4",
+    "redux-thunk": "^1.0.0"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [],
+    "global": [
+      "$",
+      "fetch",
+      "describe",
+      "it",
+      "xit",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "chai",
+      "expect",
+      "XDomainRequest",
+      "TestUtils",
+      "React",
+      "ReactDOM",
+      "Element",
+      "Event",
+      "run",
+      "browser",
+      "factories",
+      "fetch"
+    ]
+  }
+}
