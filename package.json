@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "react-native run-android",
-    "start": "emulator -avd automatic_home; react-native run-android",
+    "start": "react-native run-android",
+    "emu": "emulator -avd automatic_home; react-native run-android",
     "android": "./node_modules/react-native/packager/launchPackager.command; exit;"
   },
   "dependencies": {

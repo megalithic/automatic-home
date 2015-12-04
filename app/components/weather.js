@@ -1,9 +1,12 @@
 import React, {
   Component,
+  PropTypes,
   View,
   Text,
   StyleSheet
 } from 'react-native'
+
+import {isEmpty} from 'lodash'
 
 let styles = StyleSheet.create({
   container: {
@@ -17,17 +20,26 @@ let styles = StyleSheet.create({
 })
 
 export class Weather extends Component {
-  constructor (props) {
-    super(props)
-    console.log(props)
+  static propTypes = {
+    weather: PropTypes.object
+  }
+
+  renderForecast () {
+    let forecast = 'Unable to retrieve forecast ..'
+    if (this.props.weather && !isEmpty(this.props.weather)) {
+      forecast = `Currently ${Math.ceil(this.props.weather.currently.apparentTemperature)}°, ${this.props.weather.currently.summary}`
+    }
+    return (
+      <Text style={styles.forecast}>
+        {forecast}
+      </Text>
+    )
   }
 
   render () {
     return (
       <View style={styles.container}>
-        <Text style={styles.forecast}>
-          Weather {this.props}
-        </Text>
+        {this.renderForecast()}
       </View>
     )
   }

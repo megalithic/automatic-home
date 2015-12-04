@@ -35,4 +35,4 @@ npm-debug.log
 
 # the app
 #
-app/config.js
+**/config.js

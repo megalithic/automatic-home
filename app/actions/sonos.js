@@ -45,6 +45,3 @@ export let setPlayerState = (room, playerState) => {
       .catch((error) => { console.log(error) })
   }
 }
-
-export let playerStateChanged = () => {
-}
