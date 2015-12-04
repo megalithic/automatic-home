@@ -67,7 +67,7 @@ class Main extends Component {
   render () {
     return (
       <Image
-        source={{uri: 'http://mixhdwallpapers.com/wp-content/uploads/2014/08/628.jpg'}}
+        source={{uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/628.jpg'}}
         style={styles.containerImage}
       >
         <View style={styles.container}>
