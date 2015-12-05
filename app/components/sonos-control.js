@@ -7,33 +7,6 @@ import React, {
   PropTypes
 } from 'react-native'
 
-let styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 20
-  },
-  buttons: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    flex: 3
-  },
-  button: {
-    width: 100,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,.2)',
-    borderRadius: 10,
-    margin: 5
-  },
-  buttonText: {
-    color: 'rgba(255,255,255,1)'
-  }
-})
-
 export class SonosControl extends Component {
   static propTypes = {
     player: PropTypes.object,
@@ -110,3 +83,30 @@ export class SonosControl extends Component {
     )
   }
 }
+
+let styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 20
+  },
+  buttons: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    flex: 3
+  },
+  button: {
+    width: 100,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,.2)',
+    borderRadius: 10,
+    margin: 5
+  },
+  buttonText: {
+    color: 'rgba(255,255,255,1)'
+  }
+})

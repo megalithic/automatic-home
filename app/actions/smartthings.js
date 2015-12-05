@@ -1,5 +1,5 @@
 import * as types from '../action-types'
-import axios from 'axios'
+import config from '../config'
 
 function requestDevices () {
   return { type: types.REQUEST_DEVICES }
@@ -9,17 +9,24 @@ function receiveDevices (res) {
   return {
     type: types.RECEIVE_DEVICES,
     receivedAt: Date.now(),
-    devices: res.data
+    data: res
   }
 }
 
-export let fetchDevices = function () {
+export let fetchDevices = () => {
   return dispatch => {
     dispatch(requestDevices())
 
-    return axios('')
+    let path = `${config.smartThingsApiUrl}/${config.smartThingsApiToken}/switch`
+    return fetch(path, {
+      headers: {
+        Authorization: config.smartThingsAuthToken
+      }
+    })
+      .then(res => res.json())
       .then((res) => {
-        dispatch(receiveDevices(res.data))
+        console.log('devices are?', res)
+        dispatch(receiveDevices(res))
       })
       .catch((error) => { console.log(error) })
   }

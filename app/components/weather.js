@@ -8,17 +8,6 @@ import React, {
 
 import {isEmpty} from 'lodash'
 
-let styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20
-  },
-  forecast: {
-    color: '#aaa'
-  }
-})
-
 export class Weather extends Component {
   static propTypes = {
     weather: PropTypes.object
@@ -44,3 +33,14 @@ export class Weather extends Component {
     )
   }
 }
+
+let styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
+  },
+  forecast: {
+    color: '#aaa'
+  }
+})

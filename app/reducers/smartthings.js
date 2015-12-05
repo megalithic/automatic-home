@@ -1,7 +1,7 @@
 import * as types from '../action-types'
 
 const initialState = {
-  devices: []
+  devices: {}
 }
 
 export function smartthings (state = initialState, action) {
@@ -13,7 +13,7 @@ export function smartthings (state = initialState, action) {
     case types.RECEIVE_DEVICES:
       return Object.assign({}, state, {
         isFetching: false,
-        devices: action.devices,
+        devices: action.data,
         lastUpdated: action.receivedAt
       })
     default:

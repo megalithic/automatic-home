@@ -11,9 +11,11 @@ import { SonosTrack } from '../components/sonos-track'
 import { SonosControl } from '../components/sonos-control'
 import { Clock } from '../components/clock'
 import { Weather } from '../components/weather'
+import { SmartThingsDevices } from '../components/smartthings-devices'
 
 import { setPlayerState, fetchPlayer } from '../actions/sonos'
 import { fetchWeather } from '../actions/weather'
+import { fetchDevices } from '../actions/smartthings'
 
 import { isEmpty } from 'lodash'
 import config from '../config'
@@ -22,6 +24,7 @@ class Main extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     sonos: PropTypes.object,
+    devices: PropTypes.object,
     weather: PropTypes.object
   }
 
@@ -38,15 +41,9 @@ class Main extends Component {
   }
 
   componentDidMount () {
-    // TODO: figure out a better way of getting frequent sonos player state updates
-    this.sonosPolling = setInterval(() => {
-      this.props.dispatch(fetchPlayer('bedroom')) // TODO: make zone selectable
-    }, config.sonosPoll)
-
-    this.props.dispatch(fetchWeather())
-    this.weatherPolling = setInterval(() => {
-      this.props.dispatch(fetchWeather())
-    }, config.weatherPoll)
+    this.getSonos()
+    this.getWeather()
+    this.getSmartThings()
   }
 
   componentWillReceiveProps (nextProps) {
@@ -64,6 +61,27 @@ class Main extends Component {
   componentWillUnmount () {
     clearInterval(this.sonosPolling)
     clearInterval(this.weatherPolling)
+  }
+
+  getSonos = () => {
+    this.props.dispatch(fetchPlayer('bedroom'))
+    this.sonosPolling = setInterval(() => {
+      this.props.dispatch(fetchPlayer('bedroom')) // TODO: make zone selectable
+    }, config.sonosPoll)
+  }
+
+  getWeather = () => {
+    this.props.dispatch(fetchWeather())
+    this.weatherPolling = setInterval(() => {
+      this.props.dispatch(fetchWeather())
+    }, config.weatherPoll)
+  }
+
+  getSmartThings = () => {
+    this.props.dispatch(fetchDevices())
+    this.smartThingsPolling = setInterval(() => {
+      this.props.dispatch(fetchDevices())
+    }, config.smartThingsPoll)
   }
 
   setPlayerState = () => {
@@ -105,19 +123,25 @@ class Main extends Component {
   getTimeBasedImage = (source) => {
     if (this.forecastIsLoaded()) {
       if (this.isNightTime()) {
-        source = {uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/app/images/night.jpg'}
+        source = {uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/night.jpg'}
       } else {
-        source = {uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/app/images/day.jpg'}
+        source = {uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/day.jpg'}
       }
     }
 
+    console.log('source is', source)
     return source
   }
 
   render () {
+    // let uri = this.getTimeBasedImage({uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/app/images/night.jpg'})
     return (
       <Image
-        source={this.getTimeBasedImage({uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/app/images/night.jpg'})}
+        source={
+          this.getTimeBasedImage({
+            uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/night.jpg'
+          })
+        }
         style={styles.containerImage}
       >
         <View style={[styles.container, this.state.timeBasedStyles.containerStyles]}>
@@ -143,7 +167,7 @@ class Main extends Component {
 function mapStateToProps (state) {
   return {
     sonos: state.sonos,
-    smartthings: state.smartthings,
+    devices: state.smartthings,
     weather: state.weather
   }
 }
