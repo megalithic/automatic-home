@@ -1,8 +1,8 @@
 import React, {
   Component,
   PropTypes,
-  ScrollView,
   View,
+  TouchableNativeFeedback,
   Text,
   StyleSheet
 } from 'react-native'
@@ -11,47 +11,70 @@ import {isEmpty} from 'lodash'
 
 export class SmartThingsDevices extends Component {
   static propTypes = {
-    devices: PropTypes.object
+    smartthings: PropTypes.object,
+    toggleSwitch: PropTypes.func
   }
 
   renderDevices () {
-    let devices = 'Unable to retrieve forecast ..'
-    if (this.props.devices && !isEmpty(this.props.devices)) {
-      console.log('devices to be rendered', this.props.devices)
-      devices = JSON.stringify(this.props.devices)
+    let devices = 'Unable to retrieve devices ..'
+    if (
+      this.props.smartthings &&
+      !isEmpty(this.props.smartthings) &&
+      !isEmpty(this.props.smartthings.devices)
+    ) {
+      let getSwitchStatus = (device) => {
+        if (device && device.value) {
+          return device.value.switch ? 'On' : 'Off'
+        }
+      }
+      devices = this.props.smartthings.devices.map((device, i) => {
+        if (device && device.label) {
+          return device.label.toLowerCase().match(/bedroom lamp/) !== null
+            ? `${device.label}: ${getSwitchStatus(device)}`
+            : ''
+        }
+
+        return ''
+      })
+
+      return (
+        <View style={styles.devices}>
+          {devices.map(
+            (device, i) =>
+            <TouchableNativeFeedback
+              onPress={this.props.toggleSwitch}
+              background={TouchableNativeFeedback.SelectableBackground()}>
+              <View style={[styles.button, styles.device]}>
+                <Text style={styles.buttonText}>{device}</Text>
+              </View>
+            </TouchableNativeFeedback>
+          )}
+        </View>
+      )
+    } else {
+      return (<View />)
     }
-    return (
-      <Text style={styles.devices}>
-        {devices}
-      </Text>
-    )
   }
 
   render () {
     return (
-      <ScrollView
-        automaticallyAdjustContentInsets={false}
-        horizontal={true}
-        style={[styles.container, styles.horizontalScrollView]}>
-      >
-        <View>
-          {this.renderDevices()}
-        </View>
-      </ScrollView>
+      this.renderDevices()
     )
   }
 }
 
 let styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: '#6A85B1',
-    height: 300
-  },
-  horizontalScrollView: {
-    height: 120
-  },
   devices: {
-    color: '#aaa'
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    padding: 20
+  },
+  device: {
+    color: '#333',
+    flex: 1
+  },
+  buttonText: {
+    color: '#fff'
   }
 })

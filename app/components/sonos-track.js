@@ -16,21 +16,31 @@ export class SonosTrack extends Component {
     if (this.props.player && !isEmpty(this.props.player)) {
       return (
         <View>
-          <View style={styles.currentTrack}>
-            <Text style={styles.trackTitle}>
-              Now Playing ({this.props.player.playerState})
+          <View style={styles.currentTrackView}>
+            <Text style={styles.trackHeader}>
+              {`Now Playing (${this.props.player.playerState})`.toUpperCase()}
             </Text>
             <Text style={styles.trackInfo}>
-              {`${this.props.player.currentTrack.artist} - ${this.props.player.currentTrack.title}`}
+              <Text style={styles.trackArtist}>
+                {this.props.player.currentTrack.artist.toUpperCase()}
+              </Text>
+              <Text style={styles.trackTitle}>
+                {this.props.player.currentTrack.title}
+              </Text>
             </Text>
           </View>
 
-          <View style={styles.nextTrack}>
-            <Text style={styles.trackTitle}>
-              Up Next
+          <View style={styles.nextTrackView}>
+            <Text style={styles.trackHeader}>
+              {'Up Next'.toUpperCase()}
             </Text>
             <Text style={styles.trackInfo}>
-              {`${this.props.player.nextTrack.artist} - ${this.props.player.nextTrack.title}`}
+              <Text style={styles.trackArtist}>
+                {this.props.player.nextTrack.artist}
+              </Text>
+              <Text style={styles.trackTitle}>
+                {this.props.player.nextTrack.title}
+              </Text>
             </Text>
           </View>
         </View>
@@ -47,27 +57,36 @@ export class SonosTrack extends Component {
 
 let styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    // flexWrap: 'wrap',
+    flexDirection: 'column',
     padding: 20
   },
-  currentTrack: {
+  currentTrackView: {
     flex: 1,
     width: 350,
     padding: 10
   },
-  nextTrack: {
+  nextTrackView: {
     flex: 1,
     width: 350,
     padding: 10
   },
-  trackTitle: {
+  trackHeader: {
     color: '#555'
   },
   trackInfo: {
     color: '#fff'
+  },
+  trackArtist: {
+    fontSize: 30,
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  trackTitle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   scrollView: {
     backgroundColor: '#6A85B1',

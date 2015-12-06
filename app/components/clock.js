@@ -35,7 +35,7 @@ export class Clock extends Component {
         <Text style={styles.time}>
           {this.state.currentDateTime.format('hh:mm')}
           <Text style={styles.seconds}>
-            {this.state.currentDateTime.format(' ss')}
+            {this.state.currentDateTime.format('ss')}
           </Text>
         </Text>
         <Text style={styles.date}>
@@ -52,14 +52,11 @@ let styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 60,
-    backgroundColor: 'rgba(255, 255, 255, .05)',
-    borderRadius: 15,
-    borderColor: '#000',
-    borderWidth: 1
+    backgroundColor: 'rgba(255, 255, 255, .05)'
   },
   time: {
     color: 'rgba(255, 255, 255, 1)',
-    fontSize: 50,
+    fontSize: 70,
     fontWeight: 'bold'
   },
   seconds: {

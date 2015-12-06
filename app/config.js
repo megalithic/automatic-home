@@ -1,17 +1,21 @@
-// Add your various config options such as:
-//  - SmartThings API URL (smartThingsApiUrl)
-//  - SmartThings API Token (smartThingsApiToken)
-//  - Sonos API URL (sonosApiUrl)
-//  - Sonos polling interval (in ms)
-//  - Forecast.io API key, latitude, and longitude
-//  - Forecast.io polling interval (in ms)
+// Set your various config options
+// TODO: move to a CRUD setup view
 export default {
+  // dashboard config
+  dayImage: '',
+  nightImage: '',
+
+  // smartthings config
   smartThingsApiUrl: '',
   smartThingsApiToken: '',
   smartThingsAuthToken: '',
-  smartThingsPoll: 450000,
+  smartThingsPoll: 5000, //450000
+
+  // sonos config
   sonosApiUrl: '',
   sonosPoll: 1000,
+
+  // weather config
   weatherApiKey: '',
   weatherLat: '',
   weatherLong: '',

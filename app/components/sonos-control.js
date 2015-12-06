@@ -103,7 +103,6 @@ let styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,.2)',
-    borderRadius: 10,
     margin: 5
   },
   buttonText: {

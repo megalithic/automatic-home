@@ -7,8 +7,7 @@ import React, {
 } from 'react-native'
 
 import { connect } from 'react-redux/native'
-import { SonosTrack } from '../components/sonos-track'
-import { SonosControl } from '../components/sonos-control'
+import { Sonos } from '../components/sonos'
 import { Clock } from '../components/clock'
 import { Weather } from '../components/weather'
 import { SmartThingsDevices } from '../components/smartthings-devices'
@@ -24,7 +23,7 @@ class Main extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     sonos: PropTypes.object,
-    devices: PropTypes.object,
+    smartthings: PropTypes.object,
     weather: PropTypes.object
   }
 
@@ -49,6 +48,7 @@ class Main extends Component {
   componentWillReceiveProps (nextProps) {
     this.setState({
       isNightTime: this.isNightTime(),
+      // TODO: offload nightTime calculations to suncalc module
       timeBasedStyles: {
         containerStyles: this.getTimeBasedStyles(
           nextProps,
@@ -96,6 +96,10 @@ class Main extends Component {
     this.props.dispatch(setPlayerState('bedroom', 'previous'))
   }
 
+  toggleSwitch = () => {
+    // this.props.dispatch(toggleSwitch('bedroom lamp'))
+  }
+
   isNightTime = (time, sunsetTime) => {
     return time >= sunsetTime
   }
@@ -123,9 +127,9 @@ class Main extends Component {
   getTimeBasedImage = (source) => {
     if (this.forecastIsLoaded()) {
       if (this.isNightTime()) {
-        source = {uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/night.jpg'}
+        source = {uri: config.nightImage}
       } else {
-        source = {uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/day.jpg'}
+        source = {uri: config.dayImage}
       }
     }
 
@@ -134,30 +138,24 @@ class Main extends Component {
   }
 
   render () {
-    // let uri = this.getTimeBasedImage({uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/app/images/night.jpg'})
+    let uri = this.getTimeBasedImage({uri: ''})
     return (
       <Image
-        source={
-          this.getTimeBasedImage({
-            uri: 'https://raw.githubusercontent.com/megalithic/automatic-home/master/night.jpg'
-          })
-        }
+        source={uri}
         style={styles.containerImage}
       >
-        <View style={[styles.container, this.state.timeBasedStyles.containerStyles]}>
+        <View style={styles.container}>
           <Clock isNightTime={this.state.isNightTime}>
             <Weather isNightTime={this.state.isNightTime} weather={this.props.weather.forecast} />
           </Clock>
-          <View style={styles.subInfo}>
-            <SonosTrack isNightTime={this.state.isNightTime} player={this.props.sonos.player} />
-          </View>
-          <SonosControl
+          <Sonos
             isNightTime={this.state.isNightTime}
             player={this.props.sonos.player}
             setPlayerState={this.setPlayerState}
             nextTrack={this.nextTrack}
             prevTrack={this.prevTrack}
           />
+          <SmartThingsDevices isNightTime={this.state.isNightTime} smartthings={this.props.smartthings} />
         </View>
       </Image>
     )
@@ -167,7 +165,7 @@ class Main extends Component {
 function mapStateToProps (state) {
   return {
     sonos: state.sonos,
-    devices: state.smartthings,
+    smartthings: state.smartthings,
     weather: state.weather
   }
 }
@@ -183,9 +181,6 @@ let styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 10, 20, .65)'
-  },
-  subInfo: {
-    flexDirection: 'row'
   }
 })
 
